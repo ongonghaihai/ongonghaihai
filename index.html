@@ -17,6 +17,11 @@
     /* *{
         border: 1px solid black;
     } */
+    .flexcenter{
+        display:flex;
+        justify-content:center;
+        align-items:center; 
+    }
     .shadow{
         box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     }
@@ -32,6 +37,9 @@
     .column{
         flex-direction: column;
     }
+    .mgl8{
+        margin-left: 8px;
+    }
    .mg8{
     margin: 8px;
    }
@@ -43,12 +51,16 @@
    .mgt8{
     margin-top: 8px;
    }
+   .mgb8{
+    margin-bottom: 8px;
+   }
    .daohang{
     padding: 10px 20px;
     border-bottom:1px solid grey;
     font-size: 16px;
     color:#666
    }
+
    @media (max-width:600px) {
     .cebian{
         display: none;
@@ -66,28 +78,100 @@
         margin: 0 0 8px;
         flex:auto;
     }
-
+}
+   #dz{
+    width:auto;
+    margin-left: auto;
+    margin-right: 10px;
+    cursor: pointer;
+    top:50%;
+    &:hover{
+        background-color: rgb(255, 17, 17);
+        transition:  0.7s;
+    }
    }
+    .music_area{
+        height: 25px;
+        width: auto;
+        overflow: hidden;
+        cursor: pointer;
+        &:hover{
+        background-color: rgb(215, 215, 215);
+    
+        }  
+    }
+    .music_image{
+        width: 25px;
+        height: auto;
+        border-radius:10%;
+    }
+    .modal {
+       display: none;
+       position: fixed;
+       z-index: 9999;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       background-color: rgba(0, 0, 0, 0.8);
+    }
+  
+    .modal-image {
+       display: block;
+       max-width: 90%;
+       max-height: 90%;
+       margin: auto;
+       margin-top: 2.5%;
+       
+      
+    }
     </style>  
 </head>
 <body class="flex">
     <!-- 侧边栏 -->
     <div style="width: 200px;z-index: 2;" class="baise shadow flex column cebian">
     <!-- 背景图 -->
-    <div>
-        <img src=".\mushdash.jpg" 
+    <div >
+        <img src=".\image\mushdash.jpg" 
         alt="smiley face" width="200px" height="auto" >
     </div>
         <!-- 信息 -->
-      <div class="flex" style="border-bottom:1px solid grey;">
-        <!-- 头像 --><a href=".\mushdash.jpg">
-            <img src=".\mushdash.jpg" 
-        alt=" " width="50px" height="50px" style="border-radius:100%;" ></a>
-        
-       <div class="flex column" >
+      <div class="flex" style="border-bottom:1px solid grey; height: 100px;">
+        <!-- 头像 -->
+        <img src=".\image\mushdash.jpg" onclick="showModal(this)"
+        alt=" " width="50px" height="50px" style="border-radius:100%;" >
+        <div id="modal" class="modal flex column" >
+            <button class="flex" style="margin-right: 10px;margin-left:auto;"onclick="hideModal()">关闭</button>
+            <img id="modal-image" class="modal-image" >
+            <form id="upload" class="flexcenter mgt8 daohang">
+            <input type="file" id="file-input" name="file-input" accept="image/*" />
+            <button type="submit">确认更改</button>
+            <script>
+                let form=document.getElementById("upload")
+                form.addEventListener("submit",function(event){
+                    event.preventDefault(); // 阻止表单默认提交
+                    let fileinput=document.getElementById("file-input")
+                    let file=fileinput.files[0]; // 获取文件对象
+                    console.log(file)
+                    let formdata=new FormData();
+                    formdata.append("file",file);
+                    console.log(formdata)
+                    let xhr=new XMLHttpRequest();
+                    console.log(xhr)
+                    xhr.open("POST","https://ongonghaihai.github.io/avatar")
+                    xhr.send(formdata);  // 发送表单数据
+                })
+
+            </script>
+            </form>
+          </div>
+       <div class="flex flex1 column" >
          <!-- 昵称 -->
-         <div class="flex1 mg8" ><b>昵称：</b></div>
-         <div class="flex1 mg8">id: </div>
+         <div class="mg8" ><b>昵称：</b></div>
+         <div class="mg8">id: </div>
+         
+         <button class="mgb8" id="dz" onclick="dianzan()">0</button>
+         
       </div> 
    </div>
    <!-- 导航栏 -->
@@ -139,10 +223,99 @@
                     <div style="height: 150px" class="baise mgt8 shadow"></div>
                     <!-- 消息区 -->
                     <div style="height: 300px" class="baise mgt8 shadow"></div>
+                    <!-- 音乐区 -->
+                    <div style="height: 200px" class="flex column baise mgt8 shadow">
+                       <div class="flex mgt8 music_area">
+                       <img src=".\image\Xenogenesis.jpg" class="music_image mgl8">
+                       <music data-name="Xenogenesis.flac" class="mgl8 " >Xenogenesis</music>
+                       </div>
+                       <div class="flex mgt8 music_area">
+                        <img src=".\image\Merry Christmas Mr. Lawrence.jpg" class="music_image mgl8">
+                        <music data-name="Merry Christmas Mr. Lawrence.mp3"class="mgl8 ">Merry Christmas Mr. Lawrence</music>
+                       </div>
+                        <div  class="flex mgt8 music_area">
+                            <img src=".\image\雪之泪 雨之音.jpg" class="music_image mgl8">
+                            <music data-name="雪之泪 雨之音.mp3"class="mgl8 ">雪之泪 雨之音</music>
+                       </div>
+                       <audio></audio>
+                    </div>
+                    
+                   
                 </div>
 
         </div>
     </div>
+    <script>
+        function showModal(image) {
+       var modal = document.getElementById("modal");
+       var modalImage = document.getElementById("modal-image");
+       modal.style.display = "block";
+       modalImage.src = image.src;
+    }
+  
+    function hideModal() {
+       var modal = document.getElementById("modal");
+       modal.style.display = "none";
+    }
+
+        let dianzanshu=window.localStorage.getItem("sfdz")
+        let ndianzanshu=window.localStorage.getItem("nsfdz")
+        let dzbq=window.document.getElementById('dz');
+        if(ndianzanshu!=null){
+            dzbq.innerText=ndianzanshu.valueOf();
+        }
+        if(dianzanshu==0||dianzanshu==null){
+            window.localStorage.removeItem("nsfdz")
+            dzbq.innerText=0;  
+        }
+
+        function dianzan(){
+            let dianzanshu=window.localStorage.getItem("sfdz")
+            if(dianzanshu){
+            let newnumber=parseInt(dianzanshu.valueOf()) +1;
+            window.localStorage.setItem("sfdz",newnumber)
+            if(newnumber<=999){
+                dzbq.innerText=newnumber;
+                window.localStorage.setItem("nsfdz",newnumber)
+            }
+            else if(newnumber>999&&newnumber<=9999){
+                let latenumber=(Math.floor(newnumber/100)/10).toFixed(1)+"k"
+                dzbq.innerText=latenumber;
+                window.localStorage.setItem("nsfdz",latenumber)
+            }
+            else{
+                let latenumber=(Math.floor(newnumber/10000)/10).toFixed(1)+"w"
+                dzbq.innerText=latenumber;
+                window.localStorage.setItem("nsfdz",latenumber)
+            }
+        return
+        }
+        else{
+            let dianzanshu=window.localStorage.setItem("sfdz",0)
+            dianzan()
+        }
+
+    }
+
+        const btns=document.querySelectorAll("music")
+        let statue=false;
+        for(const btn of btns){
+            btn.onclick=function(){
+                const name=this.dataset.name;
+                const audio=document.querySelector("audio");
+                audio.src="./music/"+name;
+                if(statue){
+                    statue=false;
+                    audio.pause();
+                }
+                else{
+                    statue=true;
+                    audio.play();}
+                
+            }
+        }
+       
+        </script>
 
 </body>
 </html>

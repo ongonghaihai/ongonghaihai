@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Button</title>
+<style>
+body{
+  margin:0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height:100vh;
+  background-color:grey;
+}
+.box{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#shurukuang{
+  border: 0;
+  border-bottom: 2px solid #fff;
+  padding: 4px 2px;
+  display: block;
+  line-height: 1.5;
+  background: 0;
+  outline: none;
+  text-align: center;
+  transition: border-color 0.2s ease-in-out;
+  border-radius: 0;
+  color: #fff;
+  font-size: 2rem;
+  max-width: 90%;
+}
+#anniu{
+  margin-left: -20px;
+  margin-right: 10px;
+  color:#ccc;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+}
+input::placeholder{
+  color:#ccc;
+  
+}
+
+
+</style>
+</head>
+<body>
+  <div class="box">
+    <input placeholder="something important" id="shurukuang"/>
+    <span id="anniu" onclick="change()">√</span>
+  </div>
+  <script>
+    let youshi=false;
+    function change(){
+      let anniu=document.getElementById("anniu");
+      let shurukuang=document.getElementById("shurukuang");
+     
+      if(youshi){
+        youshi=false;
+        anniu.innerText="√";
+        shurukuang.style.borderBottomColor="#fff";
+        shurukuang.value=null;
+        shurukuang.readOnly=false;
+        window.localStorage.removeItem("shi")
+      }
+      else{
+        if(shurukuang.value!=null){
+         youshi=true;
+         anniu.innerText="×";
+         shurukuang.style.borderBottomColor="transparent";
+         shurukuang.readOnly=true;
+         window.localStorage.setItem("shi",shurukuang.value)}
+        else{
+          window.alert("请输入事项"); 
+        }
+      }
+    }
+    let data=window.localStorage.getItem("shi")
+    if(data){
+      document.getElementById("shurukuang").value=data;
+      change();
+    }
+
+ </script>
+
+<div class="upload">
+  <img src="" alt="" style="width: 200px;height:200px;background:red;">
+  <button>点击上传</button>
+  <input type="file" style="display:none" class="fileDoms" onchange="changeFile()"/>
+</div>
+
+<script>
+let btn  = document.querySelector(".upload button")
+let img = document.querySelector(".upload img")
+const fileInputs = document.querySelector('.fileDoms')
+btn.onclick = btnclick;
+function btnclick(){
+  fileInputs.click()
+}
+function changeFile(){
+  console.log("上传")
+  let reader = new FileReader();
+  reader.readAsDataURL(fileInputs.files[0]);
+  reader.onload = function(a){
+      img.src = a.target.result; //等同于reader.result
+      console.log(a,reader,reader.result);  
+  }
+}
+</script>
+
+</body>
+</html>

@@ -6,126 +6,9 @@
     <meta name="keywords" content="mushdash 喵斯快跑 个人网站(mushdash) ">
     <meta name="description" content="个人测试网站">
     <meta name="author" content="ongonghaihai">
-    <link rel="icon" href="favicon.ico">
+    <link rel="icon" type="images/x-icon" href="favicon.ico">
+    <link type="text/css" rel="stylesheet" href="index.css" />
     <title>flex 布局</title>
-    <style>
-    body{
-        margin:0;
-        height:100vh;
-        background-color: #eee;
-    }
-    /* *{
-        border: 1px solid black;
-    } */
-    .flexcenter{
-        display:flex;
-        justify-content:center;
-        align-items:center; 
-    }
-    .shadow{
-        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-    }
-    .flex{
-        display:flex;   
-    }
-    .baise{
-        background-color: white;
-    }
-    .flex1{
-        flex:1;
-    }
-    .column{
-        flex-direction: column;
-    }
-    .mgl8{
-        margin-left: 8px;
-    }
-   .mg8{
-    margin: 8px;
-   }
-   /* 右边距 */
-   .mgr8{  
-    margin-right: 8px;
-   }
-   /* 上边距 */
-   .mgt8{
-    margin-top: 8px;
-   }
-   .mgb8{
-    margin-bottom: 8px;
-   }
-   .daohang{
-    padding: 10px 20px;
-    border-bottom:1px solid grey;
-    font-size: 16px;
-    color:#666
-   }
-
-   @media (max-width:600px) {
-    .cebian{
-        display: none;
-    }
-    .neirong{
-        flex-direction: column;
-    }
-    .shuju{
-        flex-direction: column;
-    }
-    .rightside{
-        margin-left: 8px;
-    }
-    .shujukuai{ 
-        margin: 0 0 8px;
-        flex:auto;
-    }
-}
-   #dz{
-    width:auto;
-    margin-left: auto;
-    margin-right: 10px;
-    cursor: pointer;
-    top:50%;
-    &:hover{
-        background-color: rgb(255, 17, 17);
-        transition:  0.7s;
-    }
-   }
-    .music_area{
-        height: 25px;
-        width: auto;
-        overflow: hidden;
-        cursor: pointer;
-        &:hover{
-        background-color: rgb(215, 215, 215);
-    
-        }  
-    }
-    .music_image{
-        width: 25px;
-        height: auto;
-        border-radius:10%;
-    }
-    .modal {
-       display: none;
-       position: fixed;
-       z-index: 9999;
-       top: 0;
-       left: 0;
-       width: 100%;
-       height: 100%;
-       background-color: rgba(0, 0, 0, 0.8);
-    }
-  
-    .modal-image {
-       display: block;
-       max-width: 90%;
-       max-height: 90%;
-       margin: auto;
-       margin-top: 2.5%;
-       
-      
-    }
-    </style>  
 </head>
 <body class="flex">
     <!-- 侧边栏 -->
@@ -133,7 +16,11 @@
     <!-- 背景图 -->
     <div >
         <img src=".\image\mushdash.jpg" 
-        alt="smiley face" width="200px" height="auto" >
+        alt="smiley face" width="200px" height="auto" onclick="showModal1(this)">
+        <div id="modal1" class="modal flex column" >
+            <button class="flex" style="margin-right: 10px;margin-left:auto;"onclick="hideModal1()">关闭</button>
+            <img id="modal-image1" class="modal-image flex flexcenter" style="width:50%;height: auto;">
+        </div>
     </div>
         <!-- 信息 -->
       <div class="flex" style="border-bottom:1px solid grey; height: 100px;">
@@ -142,7 +29,7 @@
         alt=" " width="50px" height="50px" style="border-radius:100%;" >
         <div id="modal" class="modal flex column" >
             <button class="flex" style="margin-right: 10px;margin-left:auto;"onclick="hideModal()">关闭</button>
-            <img id="modal-image" class="modal-image" >
+            <img id="modal-image" class="modal-image flex flexcenter" style="width:50%;height: auto;">
             <form id="upload" class="flexcenter mgt8 daohang">
             <input type="file" id="file-input" name="file-input" accept="image/*" />
             <button type="submit">确认更改</button>
@@ -154,11 +41,12 @@
                     let file=fileinput.files[0]; // 获取文件对象
                     console.log(file)
                     let formdata=new FormData();
-                    formdata.append("file",file);
+                    formdata.append("avatar",file);
                     console.log(formdata)
                     let xhr=new XMLHttpRequest();
-                    console.log(xhr)
-                    xhr.open("POST","https://ongonghaihai.github.io/avatar")
+                    const resp=JSON.parse(xhr.responseText) 
+                    console.log(resp)
+                    xhr.open("POST","http://127.0.0.1:3000/avatar")
                     xhr.send(formdata);  // 发送表单数据
                 })
 
@@ -246,6 +134,17 @@
         </div>
     </div>
     <script>
+        function showModal1(image) {
+       var modal = document.getElementById("modal1");
+       var modalImage = document.getElementById("modal-image1");
+       modal.style.display = "block";
+       modalImage.src = image.src;
+    }
+  
+    function hideModal1() {
+       var modal = document.getElementById("modal1");
+       modal.style.display = "none";
+    }
         function showModal(image) {
        var modal = document.getElementById("modal");
        var modalImage = document.getElementById("modal-image");
